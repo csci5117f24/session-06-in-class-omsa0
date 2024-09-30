@@ -1,1 +1,1 @@
-create table color (name text, color text);
+create table color (color text PRIMARY KEY, name text);
