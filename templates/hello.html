@@ -16,6 +16,10 @@
     <title>Hi!</title>
 </head>
 <body>
+    <div class="color_block">
+        last_color={{last_color}}
+    </div>
+
     {% for color in colors %}
     <div class="color_block" style="background-color:{{color.color}};">
         {{color.name}}
