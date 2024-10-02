@@ -1,6 +1,7 @@
 import json
 from os import environ as env
 from urllib.parse import quote_plus, urlencode
+from functools import wraps
 
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, redirect, render_template, session, url_for, request
@@ -51,16 +52,33 @@ def logout():
         )
     )
 
-@app.route('/')
-def hello():
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user' not in session:
+            # Redirect to Login page here
+            return redirect('/')
+        return f(*args, **kwargs) #do the normal behavior -- return as it does.
+
+    return decorated
+
+@app.route('/color')
+@requires_auth
+def color():
     colors = get_colors()
     last_color = session.get('last_color', None)
-    return render_template('hello.html', colors=colors, last_color=last_color)
+    return render_template('color.html', colors=colors, last_color=last_color)
 
 @app.route("/new_color", methods=["POST"])
+@requires_auth
 def new_color():
     color_code = request.form.get("color", "#ffffff")
     color_name = request.form.get("name", "black")
     create_color(color_code, color_name)
     session['last_color'] = color_name
-    return redirect(url_for("hello"))
+    return redirect(url_for("color"))
+
+
+@app.route('/', methods=['GET'])
+def hello():
+    return render_template('hello.html', user=session.get('user', None))
