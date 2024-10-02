@@ -3,8 +3,7 @@ from os import environ as env
 from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
-from flask import Flask, redirect, render_template, session, url_for
-from os import environ as env
+from flask import Flask, redirect, render_template, session, url_for, request
 from db import *
 
 app = Flask(__name__)
