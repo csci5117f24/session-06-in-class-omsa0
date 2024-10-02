@@ -9,7 +9,7 @@
 </head>
 <body>
     {% if user %}
-    <h1>Welcome, User!</h1>
+    <h1>Hello, {{user.userinfo.name}}!</h1>
     <a href="/logout">Logout</a>
     {% else %}
     <h1>Hello!</h1>
